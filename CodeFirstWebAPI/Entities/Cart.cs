@@ -10,13 +10,10 @@ namespace CodeFirstWebAPI.Entities
         public int Id { get; set; }  // Primary Key
         [ForeignKey("User")]
         public int UserId { get; set; }  // Foreign Key
-        [ForeignKey("Good")]
-        
 
-        public List<int> Goods { get; set; } = new List<int>();
-
+        public List<CartGood> CartGoods { get; set; } = new();
         public virtual User User { get; set; }
-        public virtual List<Good> Good { get; set; }
+        public virtual List<CartGood> Goods { get; set; } = new List<CartGood>();
 
     }
 }

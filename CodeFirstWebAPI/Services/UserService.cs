@@ -1,18 +1,27 @@
 ﻿using CodeFirstWebAPI.Entities;
 
-namespace CodeFirstWebAPI.Services
+namespace CodeFirstWebAPI.Services;
+
+public interface IUserService 
 {
-    public class UserService
+    List<User> GetAllUsers();
+    User GetUserById(int id);
+    User GetUserByName(string name);
+}
+public class UserService: IUserService
+{
+    
+
+    private readonly IRepositoryService<User> repositoryService;
+
+    public UserService(IRepositoryService<User> repositoryService)
     {
-        private static List<User> users = new List<User>
-        {
-            new User { Id = 1, Name = "Alice" },
-            new User { Id = 2, Name = "Bob" }
-        };
-
-        public List<User> GetAllUsers() => users;
-
-        public User GetUserById(int id) => users.FirstOrDefault(u => u.Id == id);
-        public User GetUserByName(string name) => users.FirstOrDefault(u => u.Name == name);
+        this.repositoryService = repositoryService;
     }
+
+    
+    public List<User> GetAllUsers() => repositoryService.GetAll().ToList();
+    public User GetUserById(int id) => repositoryService.GetById(id);
+    public User GetUserByName(string name) => repositoryService.GetByName(name);
+
 }

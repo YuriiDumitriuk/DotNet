@@ -2,18 +2,27 @@
 using CodeFirstWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CodeFirstWebAPI.Controllers
+namespace CodeFirstWebAPI.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+
+public class CartController : Controller
 {
-    [ApiController]
-    [Route("[controller]")]
-    
-    public class CartController : Controller
+    private readonly ICartService cartService;
+    public CartController(ICartService cartService) 
     {
-        private readonly CartService cartService = new CartService();
-        [HttpGet("UserId")]
-        public List<Cart> GetAllCartsByUserId(int id)
+        this.cartService = cartService;
+    }
+
+    [HttpGet("UserId")]
+    public IActionResult  GetAllCartsByUserId(int id)
+    {
+        if (id == 0)
         {
-            return cartService.GetAllCartsByUserId(id);
+            return BadRequest("Id cannot be 0");
         }
+        return Ok(cartService.GetAllCartsByUserId(id));
+        
     }
 }

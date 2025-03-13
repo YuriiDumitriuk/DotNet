@@ -3,28 +3,72 @@ using Microsoft.AspNetCore.Mvc;
 using CodeFirstWebAPI.DatabaseContext;
 using CodeFirstWebAPI.Services;
 
-namespace CodeFirstWebAPI.Controllers
+namespace CodeFirstWebAPI.Controllers;
+
+[ApiController]
+[Route("[controller]")] // user
+
+public class UserController : Controller
 {
-    [ApiController]
-    [Route("[controller]")]
-    
-    public class UserController : Controller
-    {
-        private readonly UserService userService = new UserService();
-        [HttpGet]
-        public List<User> GetAllUsers()
-        {
-            return userService.GetAllUsers();
-        }
-        [HttpGet("id")]
-        public User GetUserByID(int id)
-        {
-            return userService.GetUserById(id);
-        }
-        [HttpGet("name")]
-        public User GetUserByName(string name)
-        {
-            return userService.GetUserByName(name);
-        }
+
+    private readonly IUserService userService;
+
+    public UserController(IUserService userService) {
+        this.userService = userService;
     }
+    
+    [HttpGet]
+    public IActionResult GetAllUsers()
+    {
+        return Ok(userService.GetAllUsers());
+    }
+
+    [HttpGet("id")]
+    public IActionResult GetUserByID(int id)
+    {
+        if (id == 0)
+        {
+            return BadRequest("Id cannot be 0");
+        }
+        return Ok(userService.GetUserById(id));
+
+    }
+
+    [HttpGet("name")]
+    public IActionResult GetUserByName(string name)
+    {
+        if (name == null)
+        {
+            return BadRequest("Name cannot be empty");
+        }
+        return Ok(userService.GetUserByName(name));
+    }
+
+
+
+    //[HttpGet("id")]
+    //public IActionResult GetUserByID(int id)
+    //{
+    //    if (id == 0)
+    //    {
+    //        return BadRequest("Id cannot be 0");
+    //    }
+    //    return Ok(userService.GetUserById(id));
+
+    //}
+
+    //[HttpGet("name")]
+    //public IActionResult GetUserByName(string name)
+    //{
+    //    if (name == null)
+    //    {
+    //        return BadRequest("Name cannot be empty");
+    //    }
+    //    return Ok(userService.GetUserByName(name));
+    //}
 }
+
+
+
+
+
